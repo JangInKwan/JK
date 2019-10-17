@@ -1,0 +1,43 @@
+﻿<UserControl 
+    x:Class="JK.Wpf.UserControls.Media.MediaPlayer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:basecv="clr-namespace:JK.Wpf.Converters"
+    mc:Ignorable="d" 
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    Background="Black"
+    >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <basecv:BindNotNullConverter x:Key="BindNotNullConverter" />
+            <basecv:MediaKindToVisibleConverter x:Key="MediaKindToVisibleConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Image x:Name="IgImage" 
+               Source="{Binding Path=ImageUri, NotifyOnTargetUpdated=True, Converter={StaticResource BindNotNullConverter}}" 
+               Visibility="{Binding PlayMediaKind, Converter={StaticResource MediaKindToVisibleConverter}, ConverterParameter=1}" 
+               >
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" Duration="0:1:0" From="0" To="100"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
+        </Image>
+
+        <MediaElement x:Name="meVideo" Source="{Binding Path=VideoUri, Converter={StaticResource BindNotNullConverter}}" 
+                      LoadedBehavior="Play" IsMuted="True" MediaEnded="meVideo_MediaEnded" MediaFailed="meVideo_MediaFailed" MediaOpened="MeVideo_MediaOpened"
+                      Visibility="{Binding PlayMediaKind, Converter={StaticResource MediaKindToVisibleConverter}, ConverterParameter=2}"/>
+
+        <Grid Background="Black" Visibility="{Binding ListIsEmpty, Converter={StaticResource BoolToVisibleConverter}}" >
+            <TextBlock Foreground="White" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Text="등록된 파일이 없습니다." />
+        </Grid>
+    </Grid>
+</UserControl>
