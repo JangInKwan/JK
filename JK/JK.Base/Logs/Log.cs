@@ -12,33 +12,36 @@ namespace JK.Base.Logs
 {
     public static class Log
     {
-        // 로그 디렉토리 dlfma
+        /// 로그 디렉토리 root
+        private const string ROOT_DIR = @"C:\";
+        /// 로그 디렉토리 dlfma
         private const string CONFIG_DIR = "Log";
-        // 로그 파일이름
+        /// 로그 파일이름
         private const string CONFIG_NAME_FORMAT = "{0}_";
-        // StackTrace 로그 파일이름
+        /// StackTrace 로그 파일이름
         private const string CONFIG_NAME_FORMAT_STACKTRACE = "{0}_StackTrace_";
 
-
-        // 오늘날짜
-        private static DateTime _nowDate = DateTime.MinValue;
-        // Assembly Name
+        /// 오늘날짜
+        private static string _nowDate = DateTime.MinValue.ToString("yyyyMMdd");
+        /// Assembly Name
         private static string _assemblyName = Assembly.GetEntryAssembly().GetName().Name;
-        // 로그 만료일 (일 보관)
+        /// 로그 만료일 (일 보관)
         private static int _expireDate = 90;
-        // lock
+        /// lock
         private static object _lock = new object();
 
-
-        private static bool inUseStackTraceLog = false;
+        /// <summary>
+        /// tackTraceLog 사용 여부
+        /// </summary>
+        private static bool isUseStackTraceLog = false;
         /// <summary>
         /// StackTrace 로그 사용
         /// </summary>
         public static void UseStackTraceLog()
         {
-            if (!inUseStackTraceLog)
+            if (!isUseStackTraceLog)
             {
-                inUseStackTraceLog = true;
+                isUseStackTraceLog = true;
 
                 AppDomain.CurrentDomain.UnhandledException += (s, e) =>
                 {
@@ -92,7 +95,11 @@ namespace JK.Base.Logs
         /// <param name="e">Exception</param>
         public static void ei(string log, Exception e)
         {
-            WriteLog($"Error Info - {log} : {e.Message}");
+            if (!isUseStackTraceLog)
+            {
+                WriteLog($"Error Info - {log} : {e.Message}");
+                WriteStackTraceLog($"Error Info - {log} : {e.Message}", e.StackTrace);
+            }
         }
 
         /// <summary>
@@ -119,7 +126,7 @@ namespace JK.Base.Logs
             {
                 DeleteExpiredLog();
 
-                var info = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), CONFIG_DIR, $"{string.Format(CONFIG_NAME_FORMAT, _assemblyName)}{_nowDate}.txt"));
+                var info = new FileInfo(Path.Combine(ROOT_DIR, CONFIG_DIR, $"{string.Format(CONFIG_NAME_FORMAT, _assemblyName)}{_nowDate}.txt"));
 
                 if (!info.Directory.Exists)
                     info.Directory.Create();
@@ -132,7 +139,9 @@ namespace JK.Base.Logs
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            { 
+            }
         }
 
         /// <summary>
@@ -146,7 +155,7 @@ namespace JK.Base.Logs
             {
                 DeleteExpiredLog();
 
-                var info = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), CONFIG_DIR, $"{string.Format(CONFIG_NAME_FORMAT_STACKTRACE, _assemblyName)}{_nowDate}.txt"));
+                var info = new FileInfo(Path.Combine(ROOT_DIR, CONFIG_DIR, $"{string.Format(CONFIG_NAME_FORMAT_STACKTRACE, _assemblyName)}{_nowDate}.txt"));
 
                 if (!info.Directory.Exists)
                     info.Directory.Create();
@@ -160,7 +169,9 @@ namespace JK.Base.Logs
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+            }
         }
 
         /// <summary>
@@ -170,7 +181,7 @@ namespace JK.Base.Logs
         {
             try
             {
-                var diffDate = DateTime.Now;
+                var diffDate = DateTime.Now.ToString("yyyyMMdd");
 
                 if (_nowDate == diffDate)
                 {
@@ -179,7 +190,7 @@ namespace JK.Base.Logs
 
                 _nowDate = diffDate;
 
-                var info = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), CONFIG_DIR));
+                var info = new DirectoryInfo(Path.Combine(ROOT_DIR, CONFIG_DIR));
 
                 if (!info.Exists)
                     info.Create();
@@ -189,6 +200,9 @@ namespace JK.Base.Logs
 
                 lock (_lock)
                 {
+                    DateTime nowDate = DateTime.MinValue;
+                    DateTime.TryParseExact(_nowDate, "yyyyMMdd", null, DateTimeStyles.None, out nowDate);
+
                     foreach (var item in info.GetFiles())
                     {
                         var name = item.Name;
@@ -196,13 +210,12 @@ namespace JK.Base.Logs
                         if (Regex.IsMatch(name, logFormat) || Regex.IsMatch(name, logStackFormat))
                         {
                             DateTime date = DateTime.MinValue;
-
                             DateTime.TryParseExact(name.Substring(name.IndexOf('_') + 1, 8), "yyyyMMdd", null, DateTimeStyles.None, out date);
 
                             if (date == DateTime.MinValue)
                                 continue;
 
-                            if (_nowDate > date.AddDays(_expireDate))
+                            if (nowDate > date.AddDays(_expireDate))
                             {
                                 item.Delete();
                             }
@@ -210,7 +223,9 @@ namespace JK.Base.Logs
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+            }
         }
         #endregion File Write, Delete
     }
