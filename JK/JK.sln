@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.852
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JK.Base", "JK.Base\JK.Base.csproj", "{EF16C948-2FAA-4344-BACA-988847977F49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JK.Wpf", "JK.Wpf\JK.Wpf.csproj", "{C44BEFE7-FEBE-4B20-8CF4-7B028FD696DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JK.Blazor", "JK.Blazor\JK.Blazor.csproj", "{3E37B85E-B183-4238-832D-C5143C8B9213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,11 +23,19 @@ Global
 		{C44BEFE7-FEBE-4B20-8CF4-7B028FD696DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44BEFE7-FEBE-4B20-8CF4-7B028FD696DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44BEFE7-FEBE-4B20-8CF4-7B028FD696DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E37B85E-B183-4238-832D-C5143C8B9213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E37B85E-B183-4238-832D-C5143C8B9213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E37B85E-B183-4238-832D-C5143C8B9213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E37B85E-B183-4238-832D-C5143C8B9213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10171B2F-FA0E-4D31-8542-AE4AD591D00E}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN2019 - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
