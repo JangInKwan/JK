@@ -1,0 +1,12 @@
+﻿<TextBlock x:Class="JK.Wpf.UserControls.CountDownTextBlock"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JK.Wpf.UserControls"
+             mc:Ignorable="d" 
+           Width="135" Height="2475"
+           FontSize="230" FontWeight="Bold" TextWrapping="Wrap" LineStackingStrategy="BlockLineHeight" LineHeight="224" Text="01234567890" HorizontalAlignment="Left"
+           >
+</TextBlock>
+

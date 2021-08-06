@@ -1,0 +1,122 @@
+﻿<UserControl 
+    x:Class="JK.Wpf.UserControls.ToastMessage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:vm="clr-namespace:JK.Wpf.ViewModels"
+    mc:Ignorable="d" 
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    >
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled"
+        VerticalScrollBarVisibility="Hidden"
+        >
+        <ItemsControl
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            ItemsSource="{Binding Items}"
+            >
+            <ItemsControl.Resources>
+                <CircleEase
+                    x:Key="DefaultEasingFunction"
+                    EasingMode="EaseOut"
+                    po:Freeze="true"
+                    />
+            </ItemsControl.Resources>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:ToastMessageItemViewModel}">
+                    <Border
+                        Background="Transparent"
+                        Padding="0 5 0 5"
+                        HorizontalAlignment="Center"
+                        >
+                        <Border.Style>
+                            <Style TargetType="{x:Type Border}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsVisible" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard x:Name="ShowBeginStoryboard">
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleY)"
+                                                        From="0"
+                                                        To="1"
+                                                        Duration="0:0:0.5"
+                                                        EasingFunction="{StaticResource DefaultEasingFunction}"
+                                                        />
+                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+                                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                                        <DiscreteDoubleKeyFrame KeyTime="0:0:0.5" Value="0" />
+                                                        <EasingDoubleKeyFrame KeyTime="0:0:1" Value="1" EasingFunction="{StaticResource DefaultEasingFunction}" />
+                                                    </DoubleAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+
+                                        <Trigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="ShowBeginStoryboard" />
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+
+                                    <DataTrigger Binding="{Binding IsAboutToDelete}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard x:Name="DeleteBeginStoryboard">
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0"
+                                                        Duration="0:0:0.5"
+                                                        EasingFunction="{StaticResource DefaultEasingFunction}"
+                                                        />
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)"
+                                                        To="100"
+                                                        Duration="0:0:0.5"
+                                                        EasingFunction="{StaticResource DefaultEasingFunction}"
+                                                        />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="DeleteBeginStoryboard" />
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+
+                                <Setter Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform />
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform />
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Border.Style>
+
+                        <Border
+                            Background="#1f232d"
+                            CornerRadius="20"
+                            Padding="30 10 30 10"
+                            Opacity="0.8"
+                            >
+                            <TextBlock
+                                Text="{Binding Message}"
+                                FontSize="26"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                />
+                        </Border>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>
