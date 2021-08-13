@@ -16,7 +16,7 @@ namespace JK.Base.HttpClinets
     /// </summary>
     /// <typeparam name="Req">Request Object Type</typeparam>
     /// <typeparam name="Res">Response Object Type</typeparam>
-    public class ApiClinet<Req, Res>
+    public class ApiClinet<Req, Res> 
     {
         // Http Rest Api Helper 
         private HttpHelper _httpHelper = new HttpHelper();
@@ -43,24 +43,9 @@ namespace JK.Base.HttpClinets
         public string ResponseString { get; private set; } = string.Empty;
 
         /// <summary>
-        /// Prepare
+        /// initialization
         /// </summary>
-        private void Prepare()
-        {
-            try
-            {
-                Release();
-            }
-            catch (Exception e)
-            {
-                Log.ei(e, "ApiClinet Prepare Fail");
-            }
-        }
-
-        /// <summary>
-        /// Release
-        /// </summary>
-        public void Release()
+        private void Init()
         {
             try
             {
@@ -83,7 +68,7 @@ namespace JK.Base.HttpClinets
         {
             try
             {
-                Prepare();
+                Init();
 
                 string queryString = string.Empty;
                 var data = string.Empty;
@@ -167,7 +152,7 @@ namespace JK.Base.HttpClinets
         {
             try
             {
-                Prepare();
+                Init();
 
                 var data = string.Empty;
 
@@ -227,6 +212,11 @@ namespace JK.Base.HttpClinets
             }
         }
 
+        /// <summary>
+        /// Xml Serializer
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         private string XmlSerializer(Req req)
         {
             string result = string.Empty;
@@ -241,6 +231,11 @@ namespace JK.Base.HttpClinets
             return result;
         }
 
+        /// <summary>
+        /// Xml Deserialize
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
         private Res XmlDeserialize(string res)
         {
             Res result = default(Res);
@@ -255,12 +250,22 @@ namespace JK.Base.HttpClinets
             return result;
         }
 
+        /// <summary>
+        /// Json Serializer
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         private string JsonSerializer(Req req)
         {
             string result = JsonConvert.SerializeObject(this, Formatting.Indented);
             return result;
         }
 
+        /// <summary>
+        /// Json Deserialize
+        /// </summary>
+        /// <param name="res"></param>
+        /// <returns></returns>
         private Res JsonDeserialize(string res)
         {
             Res result = default(Res);

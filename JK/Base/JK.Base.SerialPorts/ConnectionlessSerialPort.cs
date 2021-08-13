@@ -11,36 +11,47 @@ using System.Threading.Tasks;
 
 namespace JK.Base.SerialPorts
 {
-    public class ConnectionlessSerialPort
+    /// <summary>
+    /// 비연결성
+    /// </summary>
+    public class ConnectionlessSerialPort : IDisposable
     {
+        /// <summary>
+        /// SerialPort
+        /// </summary>
         public SerialPort SerialPort { get; private set; } = null;
-
+        /// <summary>
+        /// PortName
+        /// </summary>
         public string PortName { get; set; } = string.Empty;
-
+        /// <summary>
+        /// Baudrate
+        /// </summary>
         public int Baudrate { get; set; } = 9600;
-
+        /// <summary>
+        /// Wirte Timeout (ms)
+        /// </summary>
+        public int WirteTimeout { get; set; } = 10 * 1000;
+        /// <summary>
+        /// Error Message
+        /// </summary>
         public string ErrorMessage { get; private set; } = string.Empty;
 
-
-        public void Prepare()
+        public ConnectionlessSerialPort(string portName, int baudrate = 9600, int wirteTimeout = 10 * 1000)
         {
-            try
-            {
-                Release();
-                ErrorMessage = string.Empty;
-
-                SerialPort = new SerialPort(PortName, Baudrate);
-            }
-            catch (Exception e)
-            {
-                Log.ei(e, "Prepare Fail");
-            }
+            this.PortName = portName;
+            this.Baudrate = baudrate;
+            this.WirteTimeout = wirteTimeout;
         }
 
-        public void Release()
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        public void Dispose()
         {
             try
             {
+                ErrorMessage = string.Empty;
 
                 if (SerialPort != null)
                 {
@@ -53,59 +64,52 @@ namespace JK.Base.SerialPorts
             }
             catch (Exception e)
             {
-                Log.ei(e, "Release Fail");
+                Log.ei(e, "SerialPort Dispose Fail");
             }
         }
 
-        public bool IsOpen
-        {
-            get
-            {
-                if (SerialPort != null)
-                {
-                    return SerialPort.IsOpen;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        public bool Request(byte[] msg, int readTimeout, out byte[] response)
+        /// <summary>
+        /// Data Write
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="readTimeout"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public bool Write(byte[] msg, out byte[] response)
         {
             response = new byte[] { };
 
             try
             {
-                Prepare();
-
                 try
                 {
+                    Dispose();
+
+                    SerialPort = new SerialPort(PortName, Baudrate);
                     SerialPort.Open();
                     SerialPort.DiscardInBuffer();
                     SerialPort.DiscardOutBuffer();
                 }
                 catch (Exception e)
                 {
-                    ErrorMessage = "Port Opne Fail";
-                    SerialPort.Close();
+                    ErrorMessage = "SerialPort Opne Fail";
+                    SerialPort?.Close();
 
-                    Log.ei(e, "Port Opne Fail");
+                    Log.ei(e, "SerialPort Opne Fail");
 
                     return false;
                 }
 
                 using (var ms = new MemoryStream())
                 {
-                    using (var _oReceiveEvent = new ManualResetEventSlim(false))
+                    using (var mrEvent = new ManualResetEventSlim(false))
                     {
                         SerialPort.Write(msg, 0, msg.Length);
 
                         var sw = new Stopwatch();
                         sw.Start();
 
-                        while (!_oReceiveEvent.Wait(100))
+                        while (!mrEvent.Wait(100))
                         {
                             int readByte = SerialPort.BytesToRead;
                             byte[] bytes = new byte[readByte];
@@ -115,13 +119,13 @@ namespace JK.Base.SerialPorts
 
                             if (bytes[bytes.Length - 1] == HexCodes.ETX)
                             {
-                                _oReceiveEvent.Set();
+                                mrEvent.Set();
 
                             }
-                            else if (sw.ElapsedMilliseconds >= readTimeout)
+                            else if (sw.ElapsedMilliseconds >= WirteTimeout)
                             {
-                                _oReceiveEvent.Set();
-                                ErrorMessage = "Request Timeout";
+                                mrEvent.Set();
+                                ErrorMessage = "SerialPort Write Timeout";
                                 return false;
                             }
                         }
@@ -130,16 +134,16 @@ namespace JK.Base.SerialPorts
                     }
 
                     response = ms.ToArray();
-
-                    return true;
                 }
+
+                return true;
             }
             catch (Exception e)
             {
-                Prepare();
-                ErrorMessage = "Port Request Fail";
+                Dispose();
+                ErrorMessage = "SerialPort Write Fail";
 
-                Log.ei(e, "Port Request Fail");
+                Log.ei(e, "SerialPort Write Fail");
 
                 return false;
             }

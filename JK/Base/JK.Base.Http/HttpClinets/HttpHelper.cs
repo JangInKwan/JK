@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace JK.Base.HttpClinets
 {
-    public class HttpHelper
+    public class HttpHelper : IDisposable
     {
         private HttpClient _client = null;
         private CancellationTokenSource _cts = null;
@@ -40,13 +40,13 @@ namespace JK.Base.HttpClinets
         public HttpResponseMessage Response { get; private set; } = null;
 
         /// <summary>
-        /// Prepare
+        /// initialization
         /// </summary>
-        public void Prepare()
+        private void Init()
         {
             try
             {
-                Release();
+                Dispose();
 
                 _client = new HttpClient();
                 _client.BaseAddress = new Uri(BaseAddress);
@@ -69,7 +69,7 @@ namespace JK.Base.HttpClinets
         /// <summary>
         /// Release
         /// </summary>
-        public void Release()
+        public void Dispose()
         {
             try
             {
@@ -93,7 +93,7 @@ namespace JK.Base.HttpClinets
         {
             try
             {
-                Prepare();
+                Init();
 
                 Response = null;
                 string result = string.Empty;
@@ -121,7 +121,7 @@ namespace JK.Base.HttpClinets
         {
             try
             {
-                Prepare();
+                Init();
 
                 Response = null;
                 string result = string.Empty;
