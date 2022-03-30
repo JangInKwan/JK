@@ -1,0 +1,77 @@
+@using SB_EReceipt.Web.TROutWeb.Models
+
+@{
+    int page = Model.Page;
+    int totalCount = Model.TotalCount;
+    int pageSize = Model.PageSize;
+
+    var pageGroupSize = 10;
+
+    if (totalCount == 0)
+    {
+        totalCount = 1;
+    }
+
+    var totalPageCount = (totalCount / pageSize);
+
+    if (totalCount % pageSize != 0)
+    {
+        totalPageCount++;
+    }
+
+
+    if (totalPageCount == 0)
+    {
+        totalPageCount = 1;
+    }
+
+    int startPageNum = decimal.ToInt32(Math.Floor((decimal)((page - 1) / pageGroupSize)) * pageGroupSize + 1);
+    int endPageNum = Math.Min(startPageNum + pageGroupSize - 1, totalPageCount);
+
+
+    string subString = $"{Request.Path}?page={{0}}&";
+
+    foreach (var item in ViewData)
+    {
+        subString += $"{item.Key}={item.Value}&";
+
+    }
+}
+
+
+
+<div class="row">
+    <div class="col-xs-2 text-center">
+        Page @page of @totalPageCount
+    </div>
+    <div class="col-xs-10 text-center">
+        <div class="pagination-container">
+            <ul class="pagination">
+                @if (pageGroupSize < page)
+                {
+                    <li class="PagedList-skipToFirst"><a href="@string.Format(subString, 1)">««</a></li>
+                    <li class="PagedList-skipToPrevious"><a href="@string.Format(subString, startPageNum - pageGroupSize)">«</a></li>
+                }
+
+                @for (var i = startPageNum; i <= endPageNum; i++)
+                {
+                    if (i == page)
+                    {
+                        <li class="active"><a>@page</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@string.Format(subString, i)">@i</a></li>
+                    }
+                }
+
+                @if (startPageNum < (totalPageCount - pageGroupSize))
+                {
+                    <li class="PagedList-skipToNext"><a href="@string.Format(subString, endPageNum + 1)">»</a></li>
+                    <li class="PagedList-skipToLast"><a href="@string.Format(subString, totalPageCount)">»»</a></li>
+                }
+            </ul>
+        </div>
+
+    </div>
+</div>
