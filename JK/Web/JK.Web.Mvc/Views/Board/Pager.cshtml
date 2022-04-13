@@ -1,0 +1,29 @@
+﻿@model ListModel
+
+
+@{
+    ViewData["Title"] = "Pager";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Seq</th>
+            <th scope="col">title</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.List)
+        {
+            <tr>
+                <th scope="row">@item.Seq</th>
+                <th scope="row">@item.Title</th>
+                <th scope="row">@item.RegDate</th>
+                <th scope="row">@item.ModifyDate</th>
+            </tr>
+        }
+
+    </tbody>
+</table>

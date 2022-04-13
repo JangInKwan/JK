@@ -17,16 +17,15 @@ function LocationLink(link) {
 var Popup = {
     Show: function (msg, fc) {
         $("#bntAlert").off("click");
+        $("#bntAlertClose").off("click");
 
         if (fc != undefined) {
             $('#bntAlert').click(fc);
+            $("#bntAlertClose").click(fc);
         }
 
         $('#txtAlertMsg').html(msg);
         $('#popAlert').modal('show');
-
-        //alert(msg);
-        //eval(fc);
     },
     Close: function () {
         $('#popAlert').modal('hide');
@@ -37,6 +36,7 @@ var Popup = {
 var Confirm = {
     Show: function (msg, fcOK, fcCancel) {
         $("#bntConfirmOK").off("click");
+        $("#bntConfirmCancel").off("click");
         $("#bntConfirmClose").off("click");
 
         if (fcOK != undefined) {
@@ -44,6 +44,7 @@ var Confirm = {
         }
 
         if (fcCancel != undefined) {
+            $("#bntConfirmCancel").click(fcCancel);
             $('#bntConfirmClose').click(fcCancel);
         }
 
@@ -57,7 +58,7 @@ var Confirm = {
 
 /// Empty 확인
 function IsEmpty(val) {
-    if (val == undefined || val == null || val == '' || val.trim() == '') {
+    if (val == undefined || val == null || val.trim() == '') {
         return true;
     }
     else {
@@ -193,6 +194,7 @@ var KeypressEnterKey = {
     }
 };
 
+/// 숫자 자동 채우기
 function FillZero(width, val) {
     var str = val.value;
     val.value =  str.length >= width ? str : new Array(width - str.length + 1).join('0') + str;
