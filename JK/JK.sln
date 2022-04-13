@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31521.260
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{142F19ED-09BA-477F-B6BE-C6A11724A3EA}"
 EndProject
@@ -26,8 +26,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JK.Web.Mvc", "Web\JK.Web.Mvc\JK.Web.Mvc.csproj", "{2C758FB3-51F7-4A38-8EF4-876C9EB576CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JK.Wpf.Ex", "Wpf\JK.Wpf.Ex\JK.Wpf.Ex.csproj", "{033CB576-DF09-4CA6-B0F1-1F02736AA731}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Template", "Template", "{F4AF9AC4-6C5C-464A-99E6-D2E0FA10A80D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

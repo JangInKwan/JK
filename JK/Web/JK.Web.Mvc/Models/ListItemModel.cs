@@ -7,9 +7,9 @@ namespace JK.Web.Mvc.Models
 {
     public class ListItemModel
     {
-        public string Seq{get;set;}
-        public string Title{get;set;}
-        public DateTime RegDate{get;set;}
-        public DateTime ModifyDate {get;set;}
+        public string Seq { get; set; }
+        public string Title { get; set; }
+        public DateTime RegDate { get; set; } = DateTime.MinValue;
+        public DateTime ModifyDate { get; set; } = DateTime.MinValue;
     }
 }
