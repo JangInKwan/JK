@@ -3,10 +3,74 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:JK.Wpf.Ex"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:viewmodel="clr-namespace:JK.Wpf.Ex.ViewModels"
+        xmlns:view="clr-namespace:JK.Wpf.Ex.Views"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        mc:Ignorable="d" Height="600" Width="700" >
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:ExViewModel}">
+            <view:UcEx/>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Border Grid.RowSpan="5" Background="#F6F6F6" CornerRadius="12"/>
+
+        <Border Grid.Row="0" Background="#5C5C5C"  CornerRadius="10, 0, 25, 0" Margin="0, 0, 40, 0"/>
+
+        <Border Grid.Row="2" Background="#323232"  CornerRadius="12" />
+
+
+        <Grid x:Name="grTitle" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="32"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="SB eReceipt Test" FontSize="15" Foreground="#F6F6F6" Margin="10, 5, 0, 0" />
+            <Button Grid.Column="1" Command="{Binding ExitCommand}" Style="{DynamicResource NoneButton}" Margin="0, 0, 10, 0"  >
+                <Image Source="Resources/Images/close.png"></Image>
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,2,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,10,0,0">
+
+                <ItemsControl ItemsSource="{Binding SourceCollection}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <RadioButton Content="{Binding NavName}"
+                                             Tag="{Binding NavImage}" 
+                                             CommandParameter="{Binding NavType}"
+                                             Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.NavCommand}"
+                                             Style="{StaticResource MenuButtonStyle}"                                                                                                                
+                                             GroupName="MenuGroup"
+                                             IsChecked="{Binding IsChecked}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </Grid>
+
+            <Grid Grid.Column="1" Background="Transparent">
+                <ContentControl Content="{Binding CurrentViewModel}" Margin="10,18,10,10"/>
+            </Grid>
+
+        </Grid>
+
+        <Border Grid.RowSpan="5" CornerRadius="10" BorderThickness="1" BorderBrush="Black"/>
     </Grid>
 </Window>
+

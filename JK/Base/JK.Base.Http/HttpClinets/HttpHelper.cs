@@ -96,9 +96,19 @@ namespace JK.Base.HttpClinets
                 Init();
 
                 Response = null;
+
                 string result = string.Empty;
 
-                Response = await _client.GetAsync(path + "?" + queryString, _cts.Token);
+                if (queryString.IndexOf('=') != -1)
+                {
+                    queryString = "?" + queryString;
+                }
+                else
+                {
+                    queryString = "/" + queryString;
+                }
+
+                Response = await _client.GetAsync(path + queryString, _cts.Token);
 
                 result = await Response.Content.ReadAsStringAsync();
 

@@ -86,20 +86,6 @@ namespace JK.Base.HttpClinets
                     queryString = string.Join("&", properties.ToArray());
                 }
 
-                switch (ContentType)
-                {
-                    case ContentTypeEnum.Xml:
-                    case ContentTypeEnum.Html:
-                        data = XmlSerializer(req);
-                        break;
-                    case ContentTypeEnum.Json:
-                        data = JsonSerializer(req);
-                        break;
-                    default:
-                        data = req.ToString();
-                        break;
-                }
-
                 var result = await _httpHelper.GetAsync(path, data);
 
                 if (result == null)
@@ -181,18 +167,21 @@ namespace JK.Base.HttpClinets
                 {
                     ResponseString = result;
 
-                    switch (ContentType)
+                    if (!string.IsNullOrWhiteSpace(result))
                     {
-                        case ContentTypeEnum.Xml:
-                        case ContentTypeEnum.Html:
-                            Response = XmlDeserialize(result);
-                            break;
-                        case ContentTypeEnum.Json:
-                            Response = JsonDeserialize(result);
-                            break;
-                        default:
-                            data = req.ToString();
-                            break;
+                        switch (ContentType)
+                        {
+                            case ContentTypeEnum.Xml:
+                            case ContentTypeEnum.Html:
+                                Response = XmlDeserialize(result);
+                                break;
+                            case ContentTypeEnum.Json:
+                                Response = JsonDeserialize(result);
+                                break;
+                            default:
+                                data = req.ToString();
+                                break;
+                        }
                     }
 
                     Log.i($"ApiClinet PostAsync : {result}");

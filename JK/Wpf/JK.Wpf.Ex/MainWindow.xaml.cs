@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JK.Wpf.Ex.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,27 @@ namespace JK.Wpf.Ex
     /// </summary>
     public partial class MainWindow : Window
     {
+        public MainViewModel ViewModel => DataContext as MainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            //FrameworkElement.StyleProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata
+            //{
+            //    DefaultValue = FindResource(typeof(Window))
+            //});
+
+            grTitle.MouseDown += (s, e) =>
+            {
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    this.DragMove();
+                }
+
+            };
+
+            DataContext = new MainViewModel(Dispatcher);
         }
     }
 }
