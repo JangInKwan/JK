@@ -6,10 +6,14 @@
         xmlns:viewmodel="clr-namespace:JK.Wpf.Ex.ViewModels"
         xmlns:view="clr-namespace:JK.Wpf.Ex.Views"
         WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        xmlns:toast="clr-namespace:JK.Wpf.UserControls;assembly=JK.Wpf"
         mc:Ignorable="d" Height="600" Width="700" >
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodel:ExViewModel}">
             <view:UcEx/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:PupupViewModel}">
+            <view:UcPupup/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -34,7 +38,7 @@
 
             <TextBlock Grid.Column="0" Text="SB eReceipt Test" FontSize="15" Foreground="#F6F6F6" Margin="10, 5, 0, 0" />
             <Button Grid.Column="1" Command="{Binding ExitCommand}" Style="{DynamicResource NoneButton}" Margin="0, 0, 10, 0"  >
-                <Image Source="Resources/Images/close.png"></Image>
+                <Image Source="/Resources/Images/close.png"></Image>
             </Button>
         </Grid>
 
@@ -71,6 +75,8 @@
         </Grid>
 
         <Border Grid.RowSpan="5" CornerRadius="10" BorderThickness="1" BorderBrush="Black"/>
+        
+        <!--<toast:ToastMessage></toast:ToastMessage>-->
     </Grid>
 </Window>
 

@@ -10,5 +10,6 @@ namespace JK.Wpf.Ex.Enums
     {
         None = 0,
         Ex = 1,
+        Pupup = 2, 
     }
 }

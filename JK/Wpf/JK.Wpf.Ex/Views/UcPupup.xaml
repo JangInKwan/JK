@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="JK.Wpf.Ex.Views.UcPupup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JK.Wpf.Ex.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="370" d:DesignWidth="640">
+
+    <Grid Grid.Row="0" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <Border Margin="-5" BorderThickness="2" CornerRadius="5" BorderBrush="#464646" Grid.RowSpan="5" />
+
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Alert" Command="{Binding AlertCommand}" CommandParameter="" Style="{DynamicResource CommonButton}" Height="25" Width="100" Margin="0,-3,10,0"/>
+            <Button Content="Toast" Command="{Binding ToastCommand}" CommandParameter="" Style="{DynamicResource CommonButton}" Height="25" Width="100" Margin="0,-3,0,0"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="0" Style="{DynamicResource CommonTextBlock}" HorizontalAlignment="Left" Padding="0,3,0,0">Test</TextBlock>
+        
+        <TextBox Grid.Row="1" Height="30" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Text="{Binding Msg}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" />
+
+    </Grid>
+
+</UserControl>

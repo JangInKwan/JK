@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -23,11 +24,14 @@ namespace JK.Wpf.Ex.ViewModels
             ViewModels = new Dictionary<NavType, DispatcherViewModel>
             {
                 { NavType.Ex, new ExViewModel(Dispatcher) },
+                { NavType.Pupup, new PupupViewModel(Dispatcher)},
             };
 
             ObservableCollection<NavItem> menuItems = new ObservableCollection<NavItem>
             {
                 new NavItem { NavName = "Ex", NavType = NavType.Ex, NavImage = @"/Resources/Images/ex.png", IsChecked = true },
+
+                new NavItem { NavName = "Popup", NavType = NavType.Pupup, NavImage = @"/Resources/Images/in.png", IsChecked = false },
             };
 
             MenuItemsCollection = new CollectionViewSource { Source = menuItems };
